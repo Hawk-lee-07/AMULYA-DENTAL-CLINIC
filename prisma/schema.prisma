@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Appointment {
+  id              String   @id @default(cuid())
+  bookingId       String   @unique
+  patientName     String
+  patientAge      String?
+  patientGender   String?
+  patientPhone    String
+  patientEmail    String?
+  serviceId       String
+  serviceName     String
+  fee             String
+  appointmentDate String   // Format: YYYY-MM-DD
+  shift           String   // "Morning Shift" or "Evening Shift"
+  timeSlot        String   // e.g. "10:15 AM"
+  status          String   @default("CONFIRMED") // CONFIRMED, COMPLETED, CANCELLED
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([appointmentDate])
+  @@index([appointmentDate, timeSlot])
+  @@index([status])
+}
